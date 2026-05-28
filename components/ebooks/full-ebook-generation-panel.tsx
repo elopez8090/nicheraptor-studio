@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Loader2, Sparkles, Square } from "lucide-react";
 
 import { useToast } from "@/components/providers/toast-provider";
