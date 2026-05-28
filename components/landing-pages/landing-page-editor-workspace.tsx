@@ -453,7 +453,7 @@ export function LandingPageEditorWorkspace({ page: initial }: Props) {
       center={
         <div className="space-y-3">
           <div className="sticky top-3 z-20 rounded-xl border border-border/70 bg-background/95 p-2 backdrop-blur">
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 overflow-x-auto">
               <Button variant={mode === "edit" ? "default" : "outline"} onClick={() => setMode("edit")}>Edit</Button>
               <Button variant={mode === "preview" ? "default" : "outline"} onClick={() => setMode("preview")}><Eye className="size-4" aria-hidden />Preview</Button>
               <Button variant={device === "desktop" ? "secondary" : "outline"} onClick={() => setDevice("desktop")}><Monitor className="size-4" aria-hidden />Desktop</Button>
@@ -461,7 +461,7 @@ export function LandingPageEditorWorkspace({ page: initial }: Props) {
               <Button variant="ghost" onClick={() => setShowRawEditor((v) => !v)}>{showRawEditor ? "Hide raw editor" : "Show raw editor"}</Button>
             </div>
           </div>
-          <div className={device === "mobile" ? "mx-auto w-full max-w-[430px]" : "w-full"}>
+          <div className={device === "mobile" ? "mx-auto w-full max-w-full px-0 sm:max-w-[430px]" : "w-full min-w-0"}>
             {mode === "edit" ? (
               <div className="space-y-3">
                 {sections.map((section, index) => (

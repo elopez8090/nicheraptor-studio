@@ -22,7 +22,7 @@ export function TwoColumnLayout({
   return (
     <div
       className={cn(
-        "grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] xl:gap-10",
+        "grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] xl:gap-10",
         reverseOnMobile && "flex flex-col-reverse lg:grid",
         className,
       )}

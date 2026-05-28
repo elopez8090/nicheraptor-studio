@@ -391,7 +391,7 @@ export default function NewEbookPage() {
                 })}
               </div>
 
-              <div className="mt-4 flex flex-wrap items-center gap-4">
+              <div className="mt-4 flex flex-col items-stretch gap-4 sm:flex-row sm:flex-wrap sm:items-center">
                 <input
                   id="chapter-count"
                   type="range"
@@ -400,7 +400,7 @@ export default function NewEbookPage() {
                   value={chapterCount}
                   disabled={chapterCountAuto}
                   onChange={(e) => setChapterCount(Number(e.target.value))}
-                  className="h-2 min-w-[12rem] flex-1 cursor-pointer accent-primary"
+                  className="h-2 w-full min-w-0 flex-1 cursor-pointer accent-primary sm:min-w-[12rem]"
                 />
                 <Input
                   type="number"
@@ -431,6 +431,7 @@ export default function NewEbookPage() {
           <Button
             type="button"
             size="lg"
+            className="w-full sm:w-auto"
             onClick={() => void handleGenerateOutline()}
             disabled={isGenerating}
           >
@@ -523,7 +524,7 @@ export default function NewEbookPage() {
             <Button
               type="button"
               size="lg"
-              className="mt-8"
+              className="mt-8 w-full sm:w-auto"
               onClick={handleApproveOutline}
               disabled={!projectId}
             >

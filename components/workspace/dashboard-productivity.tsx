@@ -163,7 +163,7 @@ export function DashboardProductivity({ projects }: DashboardProductivityProps) 
             >
               <ChevronLeft aria-hidden />
             </Button>
-            <div className="grid min-w-0 flex-1 gap-3 sm:grid-cols-3">
+            <div className="grid min-w-0 flex-1 grid-cols-1 gap-3 sm:grid-cols-3">
               {visibleCarousel.map((project) => (
                 <Link
                   key={project.id}

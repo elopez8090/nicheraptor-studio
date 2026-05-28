@@ -11,21 +11,21 @@ export default function Home() {
         <p className="mb-5 text-sm font-medium tracking-widest text-muted-foreground uppercase">
           Digital product studio
         </p>
-        <h1 className="max-w-4xl text-4xl font-semibold tracking-tight text-foreground sm:text-5xl md:text-6xl md:leading-[1.08]">
+        <h1 className="max-w-4xl text-3xl font-semibold tracking-tight text-foreground sm:text-5xl md:text-6xl md:leading-[1.08]">
           Create premium ebooks with AI
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
           NicheRaptor Studio helps you outline, write, and export professional
           digital products — without starting from a blank page.
         </p>
-        <div className="mt-12 flex flex-col gap-3 sm:flex-row sm:justify-center">
-          <Button size="xl" asChild>
+        <div className="mt-12 flex w-full max-w-md flex-col gap-3 sm:mx-auto sm:max-w-none sm:flex-row sm:justify-center">
+          <Button size="xl" className="w-full sm:w-auto" asChild>
             <Link href="/ebooks/new">
               Start new ebook
               <ArrowRight aria-hidden />
             </Link>
           </Button>
-          <Button variant="outline" size="xl" asChild>
+          <Button variant="outline" size="xl" className="w-full sm:w-auto" asChild>
             <Link href="/dashboard">Go to dashboard</Link>
           </Button>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -25,6 +25,8 @@ type ThreeColumnWorkspaceProps = {
   headerActions?: React.ReactNode;
 };
 
+type MobileWorkspacePanel = "nav" | "editor" | "tools";
+
 export function ThreeColumnWorkspace({
   left,
   center,
@@ -36,6 +38,7 @@ export function ThreeColumnWorkspace({
   const workspace = useOptionalEditorWorkspace();
   const studio = useOptionalStudioWorkspace();
   const centerRef = useRef<HTMLDivElement>(null);
+  const [mobilePanel, setMobilePanel] = useState<MobileWorkspacePanel>("editor");
 
   const focusMode = workspace?.focusMode ?? false;
   const leftCollapsed = focusMode || (workspace?.leftCollapsed ?? false);
@@ -83,6 +86,21 @@ export function ThreeColumnWorkspace({
     : "max-w-3xl";
   const centered = workspace?.centeredManuscript ?? true;
 
+  const showMobileNavTab = !leftCollapsed;
+  const showMobileToolsTab = !rightCollapsed;
+
+  useEffect(() => {
+    if (mobilePanel === "nav" && leftCollapsed) {
+      setMobilePanel("editor");
+    }
+    if (mobilePanel === "tools" && rightCollapsed) {
+      setMobilePanel("editor");
+    }
+  }, [leftCollapsed, mobilePanel, rightCollapsed]);
+
+  const mobilePanelClass = (panel: MobileWorkspacePanel) =>
+    cn(mobilePanel !== panel && "max-lg:hidden");
+
   return (
     <div
       className={cn(
@@ -92,13 +110,58 @@ export function ThreeColumnWorkspace({
       )}
     >
       {header && !focusMode ? (
-        <div className="shrink-0 border-b border-border/60 bg-card/80 px-4 py-5 backdrop-blur-sm sm:px-6 lg:px-8">
+        <div className="shrink-0 border-b border-border/60 bg-card/80 px-3 py-4 backdrop-blur-sm sm:px-6 lg:px-8">
           <div className="mx-auto flex max-w-[1680px] flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div className="min-w-0 flex-1">{header}</div>
             {headerActions ? (
-              <div className="flex shrink-0 items-center gap-2">{headerActions}</div>
+              <div className="flex w-full shrink-0 flex-wrap items-center gap-2 lg:w-auto lg:justify-end">
+                {headerActions}
+              </div>
             ) : null}
           </div>
+        </div>
+      ) : null}
+
+      {!focusMode && (showMobileNavTab || showMobileToolsTab) ? (
+        <div
+          className="flex gap-1 overflow-x-auto border-b border-border/60 bg-muted/20 px-3 py-2 lg:hidden"
+          role="tablist"
+          aria-label="Editor panels"
+        >
+          {showMobileNavTab ? (
+            <Button
+              type="button"
+              size="sm"
+              variant={mobilePanel === "nav" ? "secondary" : "ghost"}
+              role="tab"
+              aria-selected={mobilePanel === "nav"}
+              onClick={() => setMobilePanel("nav")}
+            >
+              Navigate
+            </Button>
+          ) : null}
+          <Button
+            type="button"
+            size="sm"
+            variant={mobilePanel === "editor" ? "secondary" : "ghost"}
+            role="tab"
+            aria-selected={mobilePanel === "editor"}
+            onClick={() => setMobilePanel("editor")}
+          >
+            Editor
+          </Button>
+          {showMobileToolsTab ? (
+            <Button
+              type="button"
+              size="sm"
+              variant={mobilePanel === "tools" ? "secondary" : "ghost"}
+              role="tab"
+              aria-selected={mobilePanel === "tools"}
+              onClick={() => setMobilePanel("tools")}
+            >
+              Tools
+            </Button>
+          ) : null}
         </div>
       ) : null}
 
@@ -123,7 +186,10 @@ export function ThreeColumnWorkspace({
       >
         {!leftCollapsed ? (
           <nav
-            className="relative border-b border-border/50 bg-muted/15 lg:border-b-0 lg:border-r"
+            className={cn(
+              "relative border-b border-border/50 bg-muted/15 lg:border-b-0 lg:border-r",
+              mobilePanelClass("nav"),
+            )}
             aria-label="Document navigation"
           >
             {workspace ? (
@@ -138,7 +204,7 @@ export function ThreeColumnWorkspace({
                 <PanelLeftClose className="size-4" aria-hidden />
               </Button>
             ) : null}
-            <div className="p-5 lg:sticky lg:top-16 lg:max-h-[calc(100vh-4rem)] lg:overflow-y-auto lg:pr-6">
+            <div className="p-4 sm:p-5 lg:sticky lg:top-16 lg:max-h-[calc(100vh-4rem)] lg:overflow-y-auto lg:pr-6">
               {left}
             </div>
           </nav>
@@ -159,15 +225,21 @@ export function ThreeColumnWorkspace({
         <div
           ref={centerRef}
           className={cn(
-            "min-h-0 min-w-0 bg-background px-4 py-6 sm:px-8 sm:py-8",
-            isFullscreen && "overflow-y-auto px-6 py-8 sm:px-12",
+            "min-h-0 min-w-0 bg-background px-3 py-5 sm:px-8 sm:py-8",
+            mobilePanelClass("editor"),
+            isFullscreen && "overflow-y-auto px-4 py-8 sm:px-12",
           )}
         >
           <div className={cn(centered && "mx-auto w-full", widthClass)}>{center}</div>
         </div>
 
         {!rightCollapsed ? (
-          <div className="relative border-t border-border/50 bg-muted/10 lg:border-t-0 lg:border-l">
+          <div
+            className={cn(
+              "relative border-t border-border/50 bg-muted/10 lg:border-t-0 lg:border-l",
+              mobilePanelClass("tools"),
+            )}
+          >
             {workspace ? (
               <Button
                 type="button"

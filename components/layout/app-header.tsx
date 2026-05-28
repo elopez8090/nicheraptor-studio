@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, Menu, Sparkles } from "lucide-react";
+import { ArrowLeft, Menu, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -32,42 +32,38 @@ export function AppHeader({
   return (
     <header
       className={cn(
-        "sticky top-0 z-30 flex h-16 shrink-0 items-center justify-between gap-4 border-b border-border/80 bg-background/80 px-4 backdrop-blur-xl sm:px-6 lg:px-8",
+        "sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between gap-2 border-b border-border/80 bg-background/80 px-3 backdrop-blur-xl sm:h-16 sm:gap-4 sm:px-6 lg:px-8",
         className,
       )}
     >
-      <div className="flex items-center gap-3 min-w-0">
+      <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
         <Button
           variant="outline"
           size="icon"
-          className="lg:hidden"
+          className="shrink-0 lg:hidden"
           aria-label="Open navigation menu"
           onClick={onOpenMobileSidebar}
         >
           <Menu aria-hidden />
         </Button>
 
-        <div className="flex items-center gap-2 lg:hidden">
-          <Sparkles className="size-4 text-primary" aria-hidden />
-          <span className="text-sm font-semibold">NicheRaptor</span>
-        </div>
-
-        <div className="min-w-0">
-          <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        <div className="min-w-0 flex-1">
+          <p className="hidden text-xs font-medium uppercase tracking-wider text-muted-foreground sm:block">
             Workspace
           </p>
-          <div className="mt-0.5 max-w-[28rem]">
+          <div className="mt-0.5 min-w-0 max-w-full sm:max-w-[28rem]">
             <AppBreadcrumbs />
           </div>
         </div>
       </div>
 
-      <div className="flex items-center gap-2 min-w-0">
+      <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
         {appChromeHidden ? (
-          <Button variant="outline" size="sm" asChild>
+          <Button variant="outline" size="sm" className="max-sm:px-2" asChild>
             <Link href="/dashboard">
-              <ArrowLeft className="size-4" aria-hidden />
-              Back to Dashboard
+              <ArrowLeft className="size-4 sm:mr-1" aria-hidden />
+              <span className="sm:hidden">Back</span>
+              <span className="hidden sm:inline">Back to Dashboard</span>
             </Link>
           </Button>
         ) : null}
@@ -124,10 +120,11 @@ export function AppHeader({
         <Button
           size="default"
           type="button"
-          className={cn(appChromeHidden && "hidden")}
+          className={cn("max-sm:size-9 max-sm:px-0", appChromeHidden && "hidden")}
           onClick={() => setQuickCreateOpen(true)}
         >
-          Create
+          <Plus className="size-4 sm:mr-0" aria-hidden />
+          <span className="hidden sm:inline">Create</span>
         </Button>
       </div>
     </header>

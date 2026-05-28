@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AppHeader } from "@/components/layout/app-header";
 import { AppSidebar } from "@/components/layout/app-sidebar";
+import { MobileStudioBottomNav } from "@/components/layout/mobile-studio-bottom-nav";
 import { StudioWorkspaceRoot } from "@/components/workspace/studio-workspace-root";
 import { useStudioWorkspace } from "@/components/workspace/studio-workspace-context";
 import { cn } from "@/lib/utils";
@@ -17,7 +18,7 @@ function AppShellFrame({ children, userEmail = null }: AppShellFrameProps) {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen flex-col bg-muted/30">
+    <div className="flex min-h-screen min-w-0 flex-col overflow-x-hidden bg-muted/30 lg:flex-row">
       <AppSidebar
         userEmail={userEmail}
         className={cn(appChromeHidden && "lg:hidden")}
@@ -31,9 +32,17 @@ function AppShellFrame({ children, userEmail = null }: AppShellFrameProps) {
         onGlobalSearchOpen={() => setGlobalSearchOpen(true)}
         onQuickCreateOpen={() => setQuickCreateOpen(true)}
       />
-      <div className="flex min-h-screen min-w-0 flex-1 flex-col lg:ml-0">
+      <div className="flex min-h-screen min-w-0 flex-1 flex-col">
         <AppHeader userEmail={userEmail} onOpenMobileSidebar={() => setMobileSidebarOpen(true)} />
-        <main className="flex-1 bg-background pb-20 lg:pb-0">{children}</main>
+        <main className="min-w-0 flex-1 bg-background pb-[calc(4.5rem+env(safe-area-inset-bottom))] lg:pb-0">
+          {children}
+        </main>
+        {!appChromeHidden ? (
+          <MobileStudioBottomNav
+            onQuickCreateOpen={() => setQuickCreateOpen(true)}
+            onGlobalSearchOpen={() => setGlobalSearchOpen(true)}
+          />
+        ) : null}
       </div>
     </div>
   );

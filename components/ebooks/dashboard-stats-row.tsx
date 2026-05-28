@@ -32,7 +32,7 @@ const statCards = [
 
 export function DashboardStatsRow({ stats }: DashboardStatsRowProps) {
   return (
-    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {statCards.map(({ key, label, icon }) => (
         <StatCard key={key} label={label} value={stats[key]} icon={icon} />
       ))}

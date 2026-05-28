@@ -53,7 +53,7 @@ export function PlannerOverview({ snapshot }: PlannerOverviewProps) {
 
   return (
     <div className="space-y-8">
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {cards.map(({ href, label, value, hint, icon: Icon }) => (
           <Link key={label} href={href} className="block transition-transform hover:scale-[1.01]">
             <StatCard label={label} value={value} hint={hint} icon={Icon} />

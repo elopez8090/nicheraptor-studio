@@ -89,7 +89,7 @@ export function RelationshipMap({
         Ready for calendar, WordPress, and repurposing workflows later.
       </p>
 
-      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-5">
+      <div className="grid grid-cols-1 gap-3 overflow-x-auto sm:grid-cols-2 lg:grid-cols-5">
         <select
           className="rounded-md border border-input bg-background px-2 py-2 text-sm"
           value={fromKind}

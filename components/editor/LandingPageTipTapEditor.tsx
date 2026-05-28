@@ -219,7 +219,7 @@ export function LandingPageTipTapEditor({
   return (
     <div className="shadow-premium-lg flex min-h-[420px] flex-col overflow-hidden rounded-2xl border border-border/80 bg-card ring-1 ring-border/40">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/50 bg-muted/20 px-3 py-2.5 sm:px-4">
-        <div className="flex flex-wrap items-center gap-0.5" role="toolbar" aria-label="Formatting">
+        <div className="-mx-1 flex min-w-0 flex-1 items-center gap-0.5 overflow-x-auto pb-0.5" role="toolbar" aria-label="Formatting">
           <ToolbarButton label="Bold" active={editor.isActive("bold")} onClick={() => editor.chain().focus().toggleBold().run()}><Bold className="size-4" aria-hidden /></ToolbarButton>
           <ToolbarButton label="Italic" active={editor.isActive("italic")} onClick={() => editor.chain().focus().toggleItalic().run()}><Italic className="size-4" aria-hidden /></ToolbarButton>
           <ToolbarButton label="Heading 1" active={editor.isActive("heading", { level: 1 })} onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}><Heading1 className="size-4" aria-hidden /></ToolbarButton>

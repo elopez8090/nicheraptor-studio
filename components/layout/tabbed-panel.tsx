@@ -73,7 +73,7 @@ export function TabbedPanel({
       <TabsList
         variant="line"
         className={cn(
-          "h-auto w-full flex-wrap justify-start gap-1 rounded-none border-b border-border/60 bg-transparent p-0 pb-0",
+          "h-auto w-full flex-nowrap justify-start gap-1 overflow-x-auto rounded-none border-b border-border/60 bg-transparent p-0 pb-0",
           listClassName,
         )}
       >

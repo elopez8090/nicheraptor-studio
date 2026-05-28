@@ -82,7 +82,7 @@ export function PublishingQueueBoard({ items, activeOnly = false }: Props) {
               {item.status.replace(/_/g, " ")}
             </Badge>
             <select
-              className="h-9 rounded-md border border-input bg-background px-2 text-sm w-[160px]"
+              className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm sm:w-[160px]"
               value={item.status}
               disabled={busyId === item.id}
               onChange={(e) => updateStatus(item.id, e.target.value)}

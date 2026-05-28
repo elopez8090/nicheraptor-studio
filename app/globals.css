@@ -129,7 +129,7 @@
     @apply bg-background text-foreground text-base leading-relaxed antialiased;
   }
   html {
-    @apply font-sans scroll-smooth;
+    @apply font-sans scroll-smooth overflow-x-hidden;
   }
   ::selection {
     @apply bg-primary/20 text-foreground;

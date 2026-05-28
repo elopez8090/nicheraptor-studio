@@ -65,7 +65,7 @@ export default async function DashboardPage() {
 
       >
 
-        <Button size="lg" asChild>
+        <Button size="lg" className="w-full sm:w-auto" asChild>
 
           <Link href="/create">
 

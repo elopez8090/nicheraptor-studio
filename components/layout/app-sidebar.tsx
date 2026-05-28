@@ -10,7 +10,6 @@ import {
   ChevronRightIcon,
   Download,
   FileText,
-  House,
   Layers,
   LayoutDashboard,
   Lightbulb,
@@ -408,32 +407,6 @@ export function AppSidebar({
         </p>
       </div>
       </aside>
-      {isMobile ? (
-        <div className="sticky bottom-0 z-30 border-t border-border/80 bg-background/95 px-3 py-2 backdrop-blur lg:hidden">
-          <div className="grid grid-cols-4 gap-2">
-            <Button variant="ghost" size="sm" className="justify-start" asChild>
-              <Link href="/dashboard">
-                <House className="size-4" aria-hidden />
-                Home
-              </Link>
-            </Button>
-            <Button variant="ghost" size="sm" className="justify-start" onClick={onQuickCreateOpen}>
-              <Plus className="size-4" aria-hidden />
-              Create
-            </Button>
-            <Button variant="ghost" size="sm" className="justify-start" onClick={onGlobalSearchOpen}>
-              <Search className="size-4" aria-hidden />
-              Search
-            </Button>
-            <Button variant="ghost" size="sm" className="justify-start" asChild>
-              <Link href="/settings">
-                <Settings className="size-4" aria-hidden />
-                Settings
-              </Link>
-            </Button>
-          </div>
-        </div>
-      ) : null}
     </>
   );
 }
