@@ -1,0 +1,2 @@
+-- Phase 31 reference: Automation & Publishing Engine
+-- Applied via: supabase/migrations/20260527300000_publishing_engine.sql
