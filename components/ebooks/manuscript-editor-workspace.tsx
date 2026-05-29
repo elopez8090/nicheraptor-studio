@@ -90,17 +90,29 @@ function ManuscriptEditorWorkspaceInner({
     return chapterContentToEditorHtml(selectedDraft.content);
   }, [selectedChapter, selectedDraft]);
 
-  const handleChapterSaved = useCallback(
-    (chapterId: string, html: string) => {
-      setChapterState((prev) => ({
+  const handleChapterSaved = useCallback((chapterId: string, html: string) => {
+    setChapterState((prev) => {
+      const current = prev[chapterId];
+      if (current?.content === html) {
+        return prev;
+      }
+      const status =
+        html.replace(/<[^>]+>/g, "").trim().length > 0 ? "generated" : "not_generated";
+      return {
         ...prev,
-        [chapterId]: {
-          content: html,
-          status: html.replace(/<[^>]+>/g, "").trim().length > 0 ? "generated" : "not_generated",
-        },
-      }));
+        [chapterId]: { content: html, status },
+      };
+    });
+  }, []);
+
+  const handleSelectedChapterSaved = useCallback(
+    (html: string) => {
+      if (!selectedChapterId) {
+        return;
+      }
+      handleChapterSaved(selectedChapterId, html);
     },
-    [],
+    [handleChapterSaved, selectedChapterId],
   );
 
   const handleAiChapterGenerated = useCallback(
@@ -242,7 +254,7 @@ function ManuscriptEditorWorkspaceInner({
                   ? "Edit this chapter…"
                   : "Write or paste this chapter, then save."
               }
-              onSaved={(html) => handleChapterSaved(selectedChapter.id, html)}
+              onSaved={handleSelectedChapterSaved}
               onEditorReady={handleEditorReady}
             />
           </div>

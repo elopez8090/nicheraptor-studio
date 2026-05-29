@@ -92,6 +92,10 @@ export function EbookTipTapEditor({
   const autosaveTimerRef = useRef<number | null>(null);
   const handleSaveRef = useRef<((source?: "autosave" | "manual") => Promise<void>) | null>(null);
   const dirtyRef = useRef(false);
+  const saveInFlightRef = useRef(false);
+  const pendingSaveRef = useRef<"autosave" | "manual" | null>(null);
+  const lastPersistedHtmlRef = useRef<string | null>(null);
+  const suppressAutosaveUntilRef = useRef(0);
   const focusMode = workspace?.focusMode ?? false;
 
   const editor = useEditor({
@@ -134,6 +138,24 @@ export function EbookTipTapEditor({
     if (!editor) {
       return;
     }
+
+    if (saveInFlightRef.current) {
+      pendingSaveRef.current = source;
+      return;
+    }
+
+    const html = editor.getHTML();
+    if (
+      source === "autosave" &&
+      lastPersistedHtmlRef.current !== null &&
+      html === lastPersistedHtmlRef.current
+    ) {
+      dirtyRef.current = false;
+      workspace?.registerDirty(false);
+      setSavePhase("saved");
+      return;
+    }
+
     if (!navigator.onLine) {
       setSaveError("You appear to be offline. Saving will resume when connection returns.");
       setSavePhase("error");
@@ -141,9 +163,9 @@ export function EbookTipTapEditor({
       return;
     }
 
-    const html = editor.getHTML();
     setSavePhase("saving");
     setSaveError(null);
+    saveInFlightRef.current = true;
 
     try {
       const result = await withRetry(
@@ -181,7 +203,11 @@ export function EbookTipTapEditor({
 
       const savedContent =
         typeof result.data.content === "string" ? result.data.content : html;
-      onSaved?.(savedContent);
+      lastPersistedHtmlRef.current = savedContent;
+      suppressAutosaveUntilRef.current = Date.now() + 400;
+      if (savedContent !== html) {
+        onSaved?.(savedContent);
+      }
       dirtyRef.current = false;
       workspace?.registerDirty(false);
       setLastSavedAt(Date.now());
@@ -194,12 +220,10 @@ export function EbookTipTapEditor({
         meta: source === "autosave" ? "Autosaved" : "Saved",
       });
       if (source === "manual") {
-        toast.success("Chapter saved");
-      } else {
         toast.toast({
-          id: "chapter-autosave",
-          title: "Autosaved",
-          variant: "info",
+          id: "chapter-manual-save",
+          title: "Chapter saved",
+          variant: "success",
           duration: 2200,
         });
       }
@@ -217,6 +241,13 @@ export function EbookTipTapEditor({
           },
         },
       });
+    } finally {
+      saveInFlightRef.current = false;
+      const pending = pendingSaveRef.current;
+      pendingSaveRef.current = null;
+      if (pending) {
+        void handleSaveRef.current?.(pending);
+      }
     }
   }, [chapterId, editor, onSaved, projectId, retrySave, toast, workspace]);
 
@@ -244,6 +275,9 @@ export function EbookTipTapEditor({
       return;
     }
     const onUpdate = () => {
+      if (Date.now() < suppressAutosaveUntilRef.current) {
+        return;
+      }
       dirtyRef.current = true;
       workspace?.registerDirty(true);
       setSavePhase("dirty");
@@ -300,6 +334,7 @@ export function EbookTipTapEditor({
       workspace?.registerDirty(false);
       setSaveError(null);
       setSavePhase("idle");
+      lastPersistedHtmlRef.current = initialHtml || null;
     }
 
     if (!chapterChanged && editor.getHTML() === initialHtml) {
@@ -307,7 +342,9 @@ export function EbookTipTapEditor({
     }
 
     if (editor.getHTML() !== initialHtml) {
+      suppressAutosaveUntilRef.current = Date.now() + 400;
       editor.commands.setContent(initialHtml, { emitUpdate: false });
+      lastPersistedHtmlRef.current = initialHtml || null;
     }
   }, [chapterId, initialHtml, editor, workspace]);
 
