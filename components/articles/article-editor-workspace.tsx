@@ -49,6 +49,11 @@ function ArticleEditorWorkspaceInner({ article: initial }: ArticleEditorWorkspac
     setArticle((a) => ({ ...a, content: html }));
   }, []);
 
+  const handleEditorSaved = useCallback((html: string) => {
+    setContentHtml((prev) => (prev === html ? prev : html));
+    setArticle((a) => (a.content === html ? a : { ...a, content: html }));
+  }, []);
+
   const getContentHtml = useCallback(() => {
     return editor?.getHTML() ?? contentHtml;
   }, [contentHtml, editor]);
@@ -186,10 +191,7 @@ function ArticleEditorWorkspaceInner({ article: initial }: ArticleEditorWorkspac
           initialHtml={contentHtml}
           contentVersion={contentVersion}
           onEditorReady={setEditor}
-          onSaved={(html) => {
-            setContentHtml(html);
-            setArticle((a) => ({ ...a, content: html }));
-          }}
+          onSaved={handleEditorSaved}
         />
       }
       right={
